@@ -78,7 +78,7 @@ export type BuildOptions = {
   /// Determines the module system used by the output file. Can be
   /// either `"cjs"` (CommonJS) or `"es"` (ES2015 module), defaults to
   /// `"es"`.
-  moduleStyle?: string,
+  moduleStyle?: "es" | "cjs",
   /// The name of the export that holds the parser in the output file.
   /// Defaults to `"parser"`.
   exportName?: string,

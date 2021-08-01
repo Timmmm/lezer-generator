@@ -1,6 +1,7 @@
 import {buildParserFile, GenError} from ".."
 
-let file = undefined, out = undefined, moduleStyle = "es", includeNames = false, exportName = undefined, noTerms = false
+let file = undefined, out = undefined, includeNames = false, exportName = undefined, noTerms = false
+let moduleStyle: "es" | "cjs" = "es"
 
 let {writeFileSync, readFileSync} = require("fs")
 
