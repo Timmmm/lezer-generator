@@ -46,9 +46,25 @@ try {
   process.exit(1)
 }
 
+/// Split a file into its basename and extension. E.g. "foo.bar" -> ["foo", "bar"]. If
+/// a file has no extension the extension is "". If it has multiple only the last extension
+/// is used, i.e. "foo" -> ["foo", ""]; "foo.bar.baz" -> ["foo.bar", "baz"].
+function splitFileExt(filename: string): [string, string] {
+  const lastDot = filename.lastIndexOf(".");
+  if (lastDot === -1) {
+    return [filename, ""];
+  }
+  return [filename.slice(0, lastDot), filename.slice(lastDot + 1)];
+}
+
 if (out) {
-  let ext = /^(.*)*?\.js$/.exec(out)
-  let [parserFile, termFile] = ext ? [out, ext[1] + ".terms.js"] : [out + ".js", out + ".terms.js"]
+  const [base, ext] = splitFileExt(out);
+
+  let [parserFile, termFile] =
+      (ext === "js" || ext === "ts")
+      ? [`${base}.${ext}`, `${base}.terms.${ext}`]
+      : [`${out}.js`, `${out}.terms.js`];
+ 
   writeFileSync(parserFile, parser)
   if (!noTerms) writeFileSync(termFile, terms)
   console.log(`Wrote ${parserFile}${noTerms ? "" : ` and ${termFile}`}`)
