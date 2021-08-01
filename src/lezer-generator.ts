@@ -1,6 +1,6 @@
 import {buildParserFile, GenError} from ".."
 
-let file = undefined, out = undefined, includeNames = false, exportName = undefined, noTerms = false
+let file = undefined, out = undefined, typescript = false, includeNames = false, exportName = undefined, noTerms = false
 let moduleStyle: "es" | "cjs" = "es"
 
 let {writeFileSync, readFileSync} = require("fs")
@@ -33,6 +33,10 @@ for (let i = 2; i < process.argv.length;) {
 
 if (!file) error("No input file given")
 
+if (out && out.endsWith(".ts")) {
+  typescript = true
+}
+
 function error(msg: string) {
   console.error(msg)
   console.log(usage)
@@ -41,7 +45,7 @@ function error(msg: string) {
 
 let parser, terms
 try {
-  ;({parser, terms} = buildParserFile(readFileSync(file, "utf8"), {fileName: file, moduleStyle, includeNames, exportName}))
+  ;({parser, terms} = buildParserFile(readFileSync(file, "utf8"), {fileName: file, moduleStyle, typescript, includeNames, exportName}))
 } catch (e) {
   console.error(e instanceof GenError ? e.message : e.stack)
   process.exit(1)
